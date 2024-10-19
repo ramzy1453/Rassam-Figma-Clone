@@ -24,7 +24,7 @@ export const createRectangle = (pointer: PointerEvent) => {
     height: 100,
     fill: "#aabbcc",
     objectId: uuidv4(),
-  } as CustomFabricObject<Rect>);
+  } as CustomFabricObject);
 
   return rect;
 };
@@ -37,7 +37,7 @@ export const createTriangle = (pointer: PointerEvent) => {
     height: 100,
     fill: "#aabbcc",
     objectId: uuidv4(),
-  } as CustomFabricObject<Triangle>);
+  } as CustomFabricObject);
 };
 
 export const createCircle = (pointer: PointerEvent) => {
@@ -55,7 +55,7 @@ export const createLine = (pointer: PointerEvent) => {
     stroke: "#aabbcc",
     strokeWidth: 2,
     objectId: uuidv4(),
-  } as CustomFabricObject<Line>);
+  });
 };
 
 export const createText = (pointer: PointerEvent, text: string) => {
@@ -177,9 +177,9 @@ export const bringElement = ({
 
   // bring the selected element to the front
   if (direction === "front") {
-    canvas.bringToFront(selectedElement);
+    canvas.bringObjectToFront(selectedElement);
   } else if (direction === "back") {
-    canvas.sendToBack(selectedElement);
+    canvas.bringObjectForward(selectedElement);
   }
 
   // canvas.renderAll();
