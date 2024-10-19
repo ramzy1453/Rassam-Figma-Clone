@@ -1,4 +1,11 @@
-import { Canvas, FabricObject, CanvasEvents, util, Point } from "fabric";
+import {
+  Canvas,
+  FabricObject,
+  CanvasEvents,
+  util,
+  Point,
+  TPointerEvent,
+} from "fabric";
 import { v4 as uuid4 } from "uuid";
 
 import {
@@ -46,7 +53,7 @@ export const handleCanvasMouseDown = ({
   shapeRef,
 }: CanvasMouseDown) => {
   // get pointer coordinates
-  const pointer = canvas.getPointer(options.e);
+  const pointer = canvas.getPointer(options.e as TPointerEvent);
 
   /**
    * get target object i.e., the object that is clicked
@@ -54,7 +61,7 @@ export const handleCanvasMouseDown = ({
    *
    * findTarget: http://fabricjs.com/docs/fabric.Canvas.html#findTarget
    */
-  const target = canvas.findTarget(options.e);
+  const target = canvas.findTarget(options.e as TPointerEvent);
 
   // set canvas drawing mode to false
   canvas.isDrawingMode = false;
@@ -115,7 +122,7 @@ export const handleCanvasMouseMove = ({
   canvas.isDrawingMode = false;
 
   // get pointer coordinates
-  const pointer = canvas.getPointer(options.e);
+  const pointer = canvas.getPointer(options.e as TPointerEvent);
 
   // depending on the selected shape, set the dimensions of the shape stored in shapeRef in previous step of handelCanvasMouseDown
   // calculate shape dimensions based on pointer coordinates
@@ -205,7 +212,7 @@ export const handleCanvasObjectModified = ({
   if (!target) return;
 
   if (target?.type !== "activeSelection") {
-    syncShapeInStorage(target);
+    syncShapeInStorage(target as any);
   }
 };
 
@@ -280,7 +287,7 @@ export const handleCanvasSelectionCreated = ({
   if (!options?.selected) return;
 
   // get the selected element
-  const selectedElement = options?.selected[0] as FabricObject;
+  const selectedElement = options?.selected[0] as any;
 
   // if only one element is selected, set element attributes
   if (selectedElement && options.selected.length === 1) {
@@ -297,14 +304,10 @@ export const handleCanvasSelectionCreated = ({
       width: scaledWidth?.toFixed(0).toString() || "",
       height: scaledHeight?.toFixed(0).toString() || "",
       fill: selectedElement?.fill?.toString() || "",
-      //@ts-expect-error : canvas errors
       stroke: selectedElement?.stroke || "",
-      //@ts-expect-error : canvas errors
       fontSize: selectedElement?.fontSize || "",
-      //@ts-expect-error : canvas errors
 
       fontFamily: selectedElement?.fontFamily || "",
-      //@ts-expect-error : canvas errors
       fontWeight: selectedElement?.fontWeight || "",
     });
   }
@@ -319,11 +322,11 @@ export const handleCanvasObjectScaling = ({
 
   // calculate scaled dimensions of the object
   const scaledWidth = selectedElement?.scaleX
-    ? selectedElement?.width * selectedElement?.scaleX
+    ? selectedElement?.width! * selectedElement?.scaleX
     : selectedElement?.width;
 
   const scaledHeight = selectedElement?.scaleY
-    ? selectedElement?.height * selectedElement?.scaleY
+    ? selectedElement?.height! * selectedElement?.scaleY
     : selectedElement?.height;
 
   setElementAttributes((prev) => ({
