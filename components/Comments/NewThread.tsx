@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import * as Portal from "@radix-ui/react-portal";
-import { useCreateThread, useSelf,  } from "@liveblocks/react/suspense";
+import { useCreateThread } from "@liveblocks/react/suspense";
 import { ComposerSubmitComment } from "@liveblocks/react-ui/primitives";
 import styles from "./NewThread.module.css";
 import { NewThreadCursor } from "./NewThreadCursor";
@@ -36,7 +36,6 @@ export function NewThread({ children }: Props) {
 
   const dragging = useRef(false);
   const dragOffset = useRef({ x: 0, y: 0 });
-  const dragStart = useRef({ x: 0, y: 0 });
 
   const lastPointerEvent = useRef<PointerEvent>();
   const [allowUseComposer, setAllowUseComposer] = useState(false);
@@ -91,7 +90,8 @@ export function NewThread({ children }: Props) {
       setMoving(true);
 
       // Prevents issue with composedPath getting removed
-      (e as any)._savedComposedPath = e.composedPath();
+      // @ts-expect-error: any error
+      e._savedComposedPath = e.composedPath();
       lastPointerEvent.current = e;
 
       const { x, y } = dragOffset.current;
@@ -141,7 +141,9 @@ export function NewThread({ children }: Props) {
       }
 
       // Prevents issue with composedPath getting removed
-      (e as any)._savedComposedPath = e.composedPath();
+      // @ts-expect-error: any error
+
+      e._savedComposedPath = e.composedPath();
       lastPointerEvent.current = e;
       setAllowUseComposer(true);
     }
@@ -171,27 +173,6 @@ export function NewThread({ children }: Props) {
       );
     };
   }, [creatingCommentState]);
-
-  // Enabling dragging the avatar
-  const handlePointerDownOverlay = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      if (!composerRef.current) {
-        return;
-      }
-
-      const rect = composerRef.current.getBoundingClientRect();
-      dragOffset.current = {
-        x: e.pageX - rect.left - window.scrollX,
-        y: e.pageY - rect.top - window.scrollY,
-      };
-      dragStart.current = {
-        x: e.pageX,
-        y: e.pageY,
-      };
-      dragging.current = true;
-    },
-    []
-  );
 
   // On composer submit, create thread and reset state
   const handleComposerSubmit = useCallback(

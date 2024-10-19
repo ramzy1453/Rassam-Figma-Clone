@@ -1,6 +1,5 @@
 import { Label } from "@/components/UI/label";
 import { Input } from "@/components/UI/input";
-import { ChangeEvent } from "react";
 
 const dimensionsOptions = [
   { label: "W", property: "width" },
@@ -40,7 +39,7 @@ const Dimensions = ({
             onChange={(e) => {
               handleInputChange(item.property, e.target.value);
             }}
-            onBlur={(e) => {
+            onBlur={() => {
               isEditingRef.current = false;
             }}
           />

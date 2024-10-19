@@ -1,10 +1,11 @@
 import { AccurateCursorPositions, DragOffset } from "@/liveblocks.config";
 
-export function getCoordsFromPointerEvent<El>(
+export function getCoordsFromPointerEvent(
   e: PointerEvent,
   dragOffset: DragOffset = { x: 0, y: 0 }
 ): AccurateCursorPositions | null {
-  if (!e.target || !(e.target as any)?.getBoundingClientRect) {
+  //@ts-expect-error : any error
+  if (!e.target || !e.target?.getBoundingClientRect) {
     return null;
   }
 
@@ -12,7 +13,9 @@ export function getCoordsFromPointerEvent<El>(
 
   // Get all parent elements
   const pathArray: HTMLElement[] =
-    (e as any)._savedComposedPath || e.composedPath() || (e as any).path;
+    //@ts-expect-error : any error
+
+    e._savedComposedPath || e.composedPath() || e.path;
 
   // Generate a set of CSS selectors using the path
   const cursorSelectors = generateSelectors(pathArray);
@@ -34,7 +37,7 @@ export function getCoordsFromPointerEvent<El>(
   };
 }
 
-export function getCoordsFromElement<El>(
+export function getCoordsFromElement(
   target: Element,
   clientX: number,
   clientY: number,
@@ -69,8 +72,8 @@ export function getCoordsFromElement<El>(
 
 function generateSelectors(pathArray: Element[]): string[] | null {
   let nthChildFromLowestIdSelectors: string[] = [];
-  let nthChildSelectors: string[] = [];
-  let classNameSelectors: string[] = [];
+  const nthChildSelectors: string[] = [];
+  const classNameSelectors: string[] = [];
 
   let dontShowCursors = false;
   let reachedBody = false;
@@ -168,7 +171,7 @@ export function getCoordsFromAccurateCursorPositions({
             y: top + height * cursorY + window.scrollY,
           };
         }
-      } catch (err) {
+      } catch {
         // Ignore errors if selectors don't work, and don't render cursors
       }
     }
