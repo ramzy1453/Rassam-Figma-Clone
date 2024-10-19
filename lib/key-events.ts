@@ -59,7 +59,7 @@ export const handleDelete = (
   if (!activeObjects || activeObjects.length === 0) return;
 
   if (activeObjects.length > 0) {
-    activeObjects.forEach((obj: CustomFabricObject<any>) => {
+    activeObjects.forEach((obj: CustomFabricObject) => {
       if (!obj.objectId) return;
       canvas.remove(obj);
       deleteShapeFromStorage(obj.objectId);
