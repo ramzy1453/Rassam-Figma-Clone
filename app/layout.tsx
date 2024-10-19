@@ -10,7 +10,7 @@ const workSans = Work_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Figma Clone",
+  title: "Rassam",
   description: "A Figma clone built with Liveblocks",
 };
 
@@ -20,12 +20,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <html lang="en">
-        <body
-          className={`${workSans.variable} bg-primary-grey-200 antialiased`}
-        >
-          <Room>{children}</Room>
-        </body>
-      </html>
+    <html lang="en">
+      <body className={`${workSans.variable} bg-primary-grey-200 antialiased`}>
+        <Room>{children}</Room>
+      </body>
+    </html>
   );
 }
