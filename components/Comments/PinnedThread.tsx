@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { ThreadData } from "@liveblocks/client";
 import { Thread } from "@liveblocks/react-ui";
 
@@ -31,13 +31,15 @@ export const PinnedThread = ({ thread, onFocus, ...props }: Props) => {
       <div
         className="absolute flex cursor-pointer gap-4"
         {...props}
-        onClick={(e: any) => {
+        onClick={(e) => {
           onFocus(thread.id);
 
           // check if click is on/in the composer
           if (
             e.target &&
+            //@ts-expect-error : error ts
             e.target.classList.contains("lb-icon") &&
+            //@ts-expect-error : error ts
             e.target.classList.contains("lb-button-icon")
           ) {
             return;

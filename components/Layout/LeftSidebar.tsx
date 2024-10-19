@@ -9,7 +9,7 @@ import Image from "next/image";
 import React from "react";
 
 type Props = {
-  allShapes: [string, any][];
+  allShapes: [string, { type: string }][];
 };
 
 export default function LeftSidebar({ allShapes }: Props) {
@@ -21,7 +21,7 @@ export default function LeftSidebar({ allShapes }: Props) {
           {allShapes.map(([objectId, shape]) => {
             const el = LeftShapes[shape.type];
             return (
-              <Item>
+              <Item key={objectId}>
                 <Image
                   src={el?.icon}
                   width={20}
