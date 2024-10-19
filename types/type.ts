@@ -1,6 +1,6 @@
 import { BaseUserMeta, User } from "@liveblocks/client";
-import fabric, { Canvas, FabricObject, Path } from "fabric";
-import { Gradient, Pattern } from "fabric/fabric-impl";
+import fabric, { Canvas, FabricObject, Path, Gradient, Pattern } from "fabric";
+import { IEvent } from "fabric/fabric-impl";
 
 export enum CursorMode {
   Hidden,
@@ -43,7 +43,7 @@ export type ShapeData = {
   type: string;
   width: number;
   height: number;
-  fill: string | Pattern | Gradient;
+  fill: string | Pattern | Gradient<SVGPatternElement>;
   left: number;
   top: number;
   objectId: string | undefined;
@@ -65,15 +65,14 @@ export type ActiveElement = {
   icon: string;
 } | null;
 
-export interface CustomFabricObject<T extends FabricObject>
-  extends FabricObject {
+export interface CustomFabricObject extends FabricObject {
   objectId?: string;
 }
 
 export type ModifyShape = {
   canvas: Canvas;
   property: string;
-  value: any;
+  value: number | string;
   activeObjectRef: React.MutableRefObject<FabricObject | null>;
   syncShapeInStorage: (shape: FabricObject) => void;
 };
@@ -97,7 +96,7 @@ export type RightSidebarProps = {
   fabricRef: React.RefObject<Canvas | null>;
   activeObjectRef: React.RefObject<FabricObject | null>;
   isEditingRef: React.MutableRefObject<boolean>;
-  syncShapeInStorage: (obj: any) => void;
+  syncShapeInStorage: (obj: object) => void;
 };
 
 export type NavbarProps = {
@@ -126,7 +125,7 @@ export type LiveCursorProps = {
 };
 
 export type CanvasMouseDown = {
-  options: fabric.IEvent;
+  options: IEvent;
   canvas: Canvas;
   selectedShapeRef: any;
   isDrawing: React.MutableRefObject<boolean>;
@@ -134,7 +133,7 @@ export type CanvasMouseDown = {
 };
 
 export type CanvasMouseMove = {
-  options: fabric.IEvent;
+  options: IEvent;
   canvas: Canvas;
   isDrawing: React.MutableRefObject<boolean>;
   selectedShapeRef: any;
@@ -153,23 +152,23 @@ export type CanvasMouseUp = {
 };
 
 export type CanvasObjectModified = {
-  options: fabric.IEvent;
+  options: IEvent;
   syncShapeInStorage: (shape: FabricObject) => void;
 };
 
 export type CanvasPathCreated = {
-  options: (fabric.IEvent & { path: CustomFabricObject<Path> }) | any;
+  options: (IEvent & { path: CustomFabricObject }) | any;
   syncShapeInStorage: (shape: fabric.Object) => void;
 };
 
 export type CanvasSelectionCreated = {
-  options: fabric.IEvent;
+  options: IEvent;
   isEditingRef: React.MutableRefObject<boolean>;
   setElementAttributes: React.Dispatch<React.SetStateAction<Attributes>>;
 };
 
 export type CanvasObjectScaling = {
-  options: fabric.IEvent;
+  options: IEvent;
   setElementAttributes: React.Dispatch<React.SetStateAction<Attributes>>;
 };
 
